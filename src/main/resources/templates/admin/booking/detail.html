@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi tiết vé</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Chi tiết vé</h2>
+
+<p><b>Mã vé:</b> <span th:text="${booking.bookingCode}"></span></p>
+<p><b>User:</b> <span th:text="${booking.user.fullName}"></span></p>
+<p><b>Phim:</b> <span th:text="${booking.showtime.movie.title}"></span></p>
+
+<p><b>Ghế:</b>
+    <span th:each="s : ${booking.bookingSeats}"
+          th:text="${s.seat.seatNumber + ' '}"></span>
+</p>
+
+<p><b>Tổng tiền:</b> <span th:text="${booking.totalAmount}"></span></p>
+<p><b>Trạng thái:</b> <span th:text="${booking.status}"></span></p>
+
+<!-- Cancel -->
+<form th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}" method="post">
+    <button class="btn btn-danger"
+            th:disabled="${booking.status.name() == 'cancelled'}">
+        Hủy vé
+    </button>
+</form>
+
+<br>
+
+<!-- Refund -->
+<form th:action="@{/admin/bookings/{id}/refund(id=${booking.id})}" method="post">
+    <button class="btn btn-warning"
+            th:disabled="${booking.paymentStatus.name() != 'paid'}">
+        Hoàn tiền
+    </button>
+</form>
+
+<br>
+<a th:href="@{/admin/bookings}" class="btn btn-secondary">Quay lại</a>
+
+</div>
+
+</body>
+</html>
